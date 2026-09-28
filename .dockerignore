@@ -1,0 +1,11 @@
+node_modules
+build
+.git
+.github
+.fly
+README.md
+.dockerignore
+Dockerfile
+fly.toml
+prisma/dev.db
+prisma/dev.db-journal

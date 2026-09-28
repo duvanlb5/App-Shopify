@@ -1,0 +1,38 @@
+{
+  "name": "esprit-shopify-tools",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "react-router build",
+    "dev": "react-router dev",
+    "start": "react-router-serve ./build/server/index.js",
+    "typecheck": "tsc --noEmit",
+    "prisma": "prisma"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.16.3",
+    "@react-router/node": "^7.9.4",
+    "@react-router/serve": "^7.9.4",
+    "@shopify/admin-api-client": "^1.1.0",
+    "@shopify/polaris": "^13.9.5",
+    "@shopify/shopify-app-react-router": "^1.1.0",
+    "isbot": "^5.1.17",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "react-router": "^7.9.4",
+    "resend": "^4.0.0"
+  },
+  "devDependencies": {
+    "@react-router/dev": "^7.9.4",
+    "@types/node": "^22.10.0",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "prisma": "^6.16.3",
+    "typescript": "^5.7.2",
+    "vite": "^6.0.0",
+    "vite-tsconfig-paths": "^5.1.4"
+  },
+  "engines": {
+    "node": ">=20.0.0"
+  }
+}

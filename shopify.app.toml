@@ -1,0 +1,33 @@
+# Shopify App Configuration
+# Learn more about the toml schema: https://shopify.dev/docs/api/shopify-app-configuration
+
+name = "esprit-shopify-tools"
+client_id = "67bb2cb3948f70431c5232bef7c31ff3"
+application_url = "https://esprit-shopify-tools.fly.dev"
+embedded = true
+
+[build]
+dev_command = "npm run dev"
+build_command = "npm run build"
+include_config_files_in_release = true
+
+[webhooks]
+api_version = "2025-01"
+
+[[webhooks.subscriptions]]
+topics = ["discounts/create"]
+uri = "/webhooks/discounts/create"
+
+[[webhooks.subscriptions]]
+topics = ["discounts/update"]
+uri = "/webhooks/discounts/update"
+
+[[webhooks.subscriptions]]
+topics = ["discounts/delete"]
+uri = "/webhooks/discounts/delete"
+
+[access_scopes]
+scopes = "write_products,write_discounts,write_price_rules,write_inventory,write_publications"
+
+[auth]
+redirect_urls = ["https://esprit-shopify-tools.fly.dev/auth/callback"]

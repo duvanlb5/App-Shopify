@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// SQLite has no enums; we store strings and validate in app code.
+model NotificationLog {
+  id        String   @id @default(cuid())
+  shop      String
+  type      String   // "discount_created" | "discount_expiring"
+  discountId String?
+  payload   String   // JSON blob
+  status    String   // "ok" | "error"
+  message   String?
+  createdAt DateTime @default(now())
+
+  @@index([shop, createdAt])
+}
+
+model SyncJob {
+  id        String   @id @default(cuid())
+  shop      String
+  kind      String   // "bulk_products" | "bulk_collections"
+  status    String   // "queued" | "running" | "ok" | "error"
+  total     Int      @default(0)
+  done      Int      @default(0)
+  failed    Int      @default(0)
+  startedAt DateTime @default(now())
+  endedAt   DateTime?
+  message   String?
+
+  @@index([shop, kind, startedAt])
+}
