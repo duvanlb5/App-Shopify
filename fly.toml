@@ -30,6 +30,15 @@ primary_region = "iad"
     soft_limit = 200
     hard_limit = 250
 
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+
 [[vm]]
   size = "shared-cpu-1x"
   memory = "256mb"
