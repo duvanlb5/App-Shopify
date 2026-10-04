@@ -8,6 +8,7 @@ export default [
     route("products/bulk", "routes/app.products.bulk.tsx"),
     route("settings", "routes/app.settings.tsx"),
   ]),
+  route("auth/*", "routes/auth.$.tsx"),
   route("webhooks/discounts/create", "routes/webhooks.discounts.create.tsx"),
   route("webhooks/discounts/update", "routes/webhooks.discounts.update.tsx"),
   route("webhooks/discounts/delete", "routes/webhooks.discounts.delete.tsx"),
