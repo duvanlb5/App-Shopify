@@ -7,6 +7,8 @@ import { isbot } from "isbot";
 import type { RenderToPipeableStreamOptions } from "react-dom/server";
 import { renderToPipeableStream } from "react-dom/server";
 
+import shopify from "~/lib/shopify.server";
+
 const ABORT_DELAY = 5_000;
 
 export default function handleRequest(
@@ -16,6 +18,11 @@ export default function handleRequest(
   routerContext: EntryContext,
   _loadContext: AppLoadContext,
 ) {
+  // Required for embedded apps: sets the session cookie, CSP, and other
+  // Shopify-specific response headers. Without this, the auth cookie is
+  // never written and the next request fails with 401.
+  shopify.addDocumentResponseHeaders(request, responseHeaders);
+
   return new Promise((resolve, reject) => {
     let shellRendered = false;
     const userAgent = request.headers.get("user-agent");
