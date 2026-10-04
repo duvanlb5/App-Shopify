@@ -5,6 +5,7 @@
   "scripts": {
     "build": "react-router build",
     "dev": "react-router dev",
+    "prestart": "node ./scripts/ensure-db.mjs",
     "start": "node --require /app/error-handler.cjs --no-warnings ./node_modules/@react-router/serve/dist/cli.js ./build/server/index.js",
     "typecheck": "tsc --noEmit",
     "prisma": "prisma"
