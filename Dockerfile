@@ -28,6 +28,7 @@ COPY --from=build --chown=nodejs:nodejs /app/build ./build
 COPY --from=build --chown=nodejs:nodejs /app/node_modules ./node_modules
 COPY --from=build --chown=nodejs:nodejs /app/prisma ./prisma
 COPY --from=build --chown=nodejs:nodejs /app/package.json ./package.json
+COPY --chown=nodejs:nodejs error-handler.cjs ./error-handler.cjs
 
 RUN mkdir -p /data/prisma && chown -R nodejs:nodejs /data
 
