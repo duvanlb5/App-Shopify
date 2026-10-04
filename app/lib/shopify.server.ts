@@ -10,7 +10,7 @@ const shopify = shopifyApp({
     "write_discounts",
     "write_price_rules",
   ],
-  appUrl: process.env.HOST ?? "https://esprit-shopify-tools.fly.dev",
+    appUrl: process.env.APP_URL ?? "https://esprit-shopify-tools.fly.dev",
   apiVersion: ApiVersion.April25,
   isEmbeddedApp: true,
   sessionStorage: new PrismaSessionStorage(db),

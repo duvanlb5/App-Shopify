@@ -10,6 +10,7 @@ primary_region = "iad"
 
 [env]
   PORT = "8080"
+  HOST = "0.0.0.0"
   NODE_ENV = "production"
   DATABASE_URL = "file:/data/prisma/dev.db"
   CRON_SECRET = "change-me-on-first-deploy"
