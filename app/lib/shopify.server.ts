@@ -8,7 +8,7 @@ console.log("[shopify.server] === SDK CONFIG AT STARTUP ===");
 console.log("[shopify.server] APP_URL:", process.env.APP_URL);
 console.log("[shopify.server] SHOPIFY_API_KEY:", process.env.SHOPIFY_API_KEY);
 console.log("[shopify.server] SHOPIFY_API_SECRET length:", process.env.SHOPIFY_API_SECRET?.length ?? 0);
-console.log("[shopify.server] SHOPIFY_API_SECRET first 8:", process.env.SHOPIFY_API_SECRET?.substring(0, 8) ?? "MISSING");
+console.log("[shopify.server] SHOPIFY_API_SECRET first 4:", process.env.SHOPIFY_API_SECRET?.substring(0, 4) ?? "MISSING", "last 4:", process.env.SHOPIFY_API_SECRET?.substring(-4) ?? "MISSING");
 console.log("[shopify.server] SCOPES raw:", JSON.stringify(process.env.SCOPES));
 console.log("[shopify.server] SCOPES parsed:", process.env.SCOPES?.split(",") ?? "UNDEFINED (using default)");
 console.log("[shopify.server] apiVersion:", ApiVersion.April25);
