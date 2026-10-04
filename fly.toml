@@ -1,4 +1,4 @@
-app = "esprit-shopify-tools"
+app = "duvi-tools"
 primary_region = "iad"
 
 [build]
@@ -16,7 +16,7 @@ primary_region = "iad"
   CRON_SECRET = "change-me-on-first-deploy"
 
 [mounts]
-  source = "esprit_data"
+  source = "duvi_data"
   destination = "/data"
 
 [[services]]
