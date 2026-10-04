@@ -1,6 +1,9 @@
-import { json, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+import { type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+
 import shopify from "~/lib/shopify.server";
 import { checkExpiringAndNotify } from "~/lib/scheduler.server";
+
+const json = Response.json;
 
 const CRON_SECRET = process.env.CRON_SECRET ?? "change-me";
 

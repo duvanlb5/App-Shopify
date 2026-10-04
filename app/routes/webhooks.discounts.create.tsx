@@ -1,8 +1,11 @@
-import { json, type ActionFunctionArgs } from "react-router";
+import { type ActionFunctionArgs } from "react-router";
+
 import shopify from "~/lib/shopify.server";
 import { db } from "~/lib/db.server";
 import { getSettings } from "~/lib/settings.server";
 import { notifyDiscountCreated } from "~/lib/notifications.server";
+
+const json = Response.json;
 
 export const action = async ({ request }: ActionFunctionArgs) => {
   const { topic, shop, payload } = await shopify.authenticate.webhook(request);

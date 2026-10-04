@@ -1,7 +1,11 @@
-import { json, type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+import { type ActionFunctionArgs, type LoaderFunctionArgs } from "react-router";
+
 import { Form, useActionData, useLoaderData } from "react-router";
+
 import shopify from "~/lib/shopify.server";
 import { DEFAULT_SETTINGS, getSettings, saveSettings } from "~/lib/settings.server";
+
+const json = Response.json;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await shopify.authenticate.admin(request);

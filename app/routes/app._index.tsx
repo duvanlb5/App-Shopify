@@ -1,6 +1,10 @@
-import { json, type LoaderFunctionArgs } from "react-router";
+import { type LoaderFunctionArgs } from "react-router";
+
 import { Link, useLoaderData } from "react-router";
+
 import shopify from "~/lib/shopify.server";
+
+const json = Response.json;
 
 export const loader = async ({ request }: LoaderFunctionArgs) => {
   const { admin } = await shopify.authenticate.admin(request);
