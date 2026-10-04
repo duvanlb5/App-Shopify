@@ -3,20 +3,20 @@ import { useRouteError } from "react-router";
 import { boundary } from "@shopify/shopify-app-react-router/server";
 import shopify from "~/lib/shopify.server";
 
-// Catch-all for all /auth/* routes required by the Shopify App Bridge:
-//   - /auth             → OAuth begin
-//   - /auth/callback    → OAuth callback (Shopify redirects here after install)
-//   - /auth/session-token → session token exchange for embedded apps
-//   - /auth/exit-iframe → exit iframe wrapper
-//   - /auth/login       → login form
-// The SDK's authenticate.admin inspects the request URL and routes internally.
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await shopify.authenticate.admin(request);
+  const url = new URL(request.url);
+  console.log(`[auth.$.tsx] loader called for: ${url.pathname}`);
+  console.log(`[auth.$.tsx] searchParams:`, Object.fromEntries(url.searchParams.entries()));
+  try {
+    await shopify.authenticate.admin(request);
+    console.log(`[auth.$.tsx] authenticate.admin returned normally for ${url.pathname}`);
+  } catch (e) {
+    console.log(`[auth.$.tsx] authenticate.admin THREW for ${url.pathname}:`, e instanceof Response ? `Response status=${e.status}` : e);
+    throw e;
+  }
   return null;
 };
 
-// Same boundary exports as app.tsx — required so /auth/session-token responses
-// include the session cookie and embedded auth headers.
 export function ErrorBoundary() {
   return boundary.error(useRouteError());
 }
