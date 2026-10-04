@@ -1,78 +1,45 @@
-import { type LoaderFunctionArgs } from "react-router";
-
-import { Link, Outlet, useLoaderData, useLocation } from "react-router";
-
+import type { HeadersFunction, LoaderFunctionArgs } from "react-router";
+import { Outlet, useLoaderData, useRouteError } from "react-router";
+import { boundary } from "@shopify/shopify-app-react-router/server";
+import { AppProvider } from "@shopify/shopify-app-react-router/react";
 import shopify from "~/lib/shopify.server";
 
-const json = Response.json;
-
 export const loader = async ({ request }: LoaderFunctionArgs) => {
-  await shopify.authenticate.admin(request);
-  const shop = shopify.utils.loadCurrentSession?.(request);
-  return json({ shopDomain: shop?.shop ?? "" });
+  const { session } = await shopify.authenticate.admin(request);
+  return {
+    apiKey: process.env.SHOPIFY_API_KEY || "",
+    shopDomain: session?.shop || "",
+  };
 };
 
-const NAV = [
-  { to: "/app", label: "Inicio", exact: true },
-  { to: "/app/discounts", label: "Descuentos" },
-  { to: "/app/collections", label: "Colecciones" },
-  { to: "/app/products/bulk", label: "Productos" },
-  { to: "/app/settings", label: "Configuración" },
-];
-
-export default function AppLayout() {
-  const { shopDomain } = useLoaderData<typeof loader>();
-  const loc = useLocation();
-
+export default function App() {
+  const { apiKey, shopDomain } = useLoaderData<typeof loader>();
   return (
-    <div style={{ minHeight: "100vh", background: "#f6f6f7", fontFamily: "system-ui, sans-serif" }}>
-      <header
-        style={{
-          background: "#202223",
-          color: "#fff",
-          padding: "14px 24px",
-          display: "flex",
-          alignItems: "center",
-          gap: 24,
-        }}
-      >
-        <strong style={{ fontSize: 16 }}>Esprit Shopify Tools</strong>
-        {shopDomain && <span style={{ color: "#a4acb1", fontSize: 13 }}>{shopDomain}</span>}
-      </header>
-
-      <nav
-        style={{
-          background: "#fff",
-          borderBottom: "1px solid #e1e3e5",
-          padding: "0 24px",
-          display: "flex",
-          gap: 4,
-        }}
-      >
-        {NAV.map((n) => {
-          const active = n.exact ? loc.pathname === n.to : loc.pathname.startsWith(n.to);
-          return (
-            <Link
-              key={n.to}
-              to={n.to}
-              style={{
-                padding: "12px 14px",
-                color: active ? "#008060" : "#202223",
-                borderBottom: active ? "2px solid #008060" : "2px solid transparent",
-                textDecoration: "none",
-                fontSize: 14,
-                fontWeight: active ? 600 : 400,
-              }}
-            >
-              {n.label}
-            </Link>
-          );
-        })}
-      </nav>
-
-      <main style={{ maxWidth: 1100, margin: "0 auto", padding: "24px" }}>
-        <Outlet />
-      </main>
-    </div>
+    <AppProvider embedded apiKey={apiKey}>
+      <ui-nav-menu>
+        <a href="/app" rel="home">Inicio</a>
+        <a href="/app/discounts">Descuentos</a>
+        <a href="/app/collections">Colecciones</a>
+        <a href="/app/products/bulk">Productos</a>
+        <a href="/app/settings">Configuración</a>
+      </ui-nav-menu>
+      {shopDomain && (
+        <div style={{ padding: "10px 20px", background: "#f1f1f1", fontSize: 13, color: "#666" }}>
+          Tienda: <strong>{shopDomain}</strong>
+        </div>
+      )}
+      <Outlet />
+    </AppProvider>
   );
 }
+
+// CRITICAL: Shopify needs React Router to catch some thrown responses
+// so that their headers (including the session cookie) are included in the response.
+// Without these two exports, embedded apps get 401 on every request after the first.
+export function ErrorBoundary() {
+  return boundary.error(useRouteError());
+}
+
+export const headers: HeadersFunction = (headersArgs) => {
+  return boundary.headers(headersArgs);
+};
