@@ -8,7 +8,7 @@ const shopify = shopifyApp({
     "write_discounts",
     "write_price_rules",
   ],
-  hostName: process.env.HOST?.replace(/^https?:\/\//, "") ?? "esprit-shopify-tools.fly.dev",
+  appUrl: process.env.HOST ?? "https://esprit-shopify-tools.fly.dev",
   apiVersion: "2025-01",
   isEmbeddedApp: true,
   webhooks: {
