@@ -31,6 +31,10 @@ COPY --from=build --chown=nodejs:nodejs /app/package.json ./package.json
 
 RUN mkdir -p /data/prisma && chown -R nodejs:nodejs /data
 
+# Make the public hostname resolvable from inside the container so the Shopify SDK
+# can validate the appUrl at boot. Replace IP if Fly reassigns it.
+RUN echo "66.241.125.250 esprit-shopify-tools.fly.dev" >> /etc/hosts
+
 USER nodejs
 EXPOSE 8080
 
