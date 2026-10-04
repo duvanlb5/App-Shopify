@@ -1,4 +1,6 @@
-import { shopifyApp } from "@shopify/shopify-app-react-router/server";
+import { shopifyApp, ApiVersion } from "@shopify/shopify-app-react-router/server";
+import { PrismaSessionStorage } from "@shopify/shopify-app-session-storage-prisma";
+import { db } from "./db.server";
 
 const shopify = shopifyApp({
   apiKey: process.env.SHOPIFY_API_KEY!,
@@ -9,12 +11,10 @@ const shopify = shopifyApp({
     "write_price_rules",
   ],
   appUrl: process.env.HOST ?? "https://esprit-shopify-tools.fly.dev",
-  apiVersion: "2025-01",
+  apiVersion: ApiVersion.April25,
   isEmbeddedApp: true,
-  webhooks: {
-    path: "/webhooks",
-  },
+  sessionStorage: new PrismaSessionStorage(db),
 });
 
 export default shopify;
-export const apiVersion = "2025-01";
+export const apiVersion = ApiVersion.April25;
