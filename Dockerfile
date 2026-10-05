@@ -6,8 +6,10 @@ RUN apk add --no-cache openssl ca-certificates
 FROM base AS deps
 WORKDIR /app
 COPY package.json package-lock.json* ./
+COPY patches ./patches
 COPY prisma ./prisma
 RUN npm ci --ignore-scripts
+RUN npx patch-package
 
 # --- build: compile TypeScript and prepare prisma client ---
 FROM base AS build

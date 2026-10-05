@@ -1,0 +1,33 @@
+diff --git a/node_modules/@shopify/shopify-app-react-router/dist/esm/server/authenticate/admin/helpers/render-app-bridge.mjs b/node_modules/@shopify/shopify-app-react-router/dist/esm/server/authenticate/admin/helpers/render-app-bridge.mjs
+index b923696..92e4e1f 100644
+--- a/node_modules/@shopify/shopify-app-react-router/dist/esm/server/authenticate/admin/helpers/render-app-bridge.mjs
++++ b/node_modules/@shopify/shopify-app-react-router/dist/esm/server/authenticate/admin/helpers/render-app-bridge.mjs
+@@ -19,7 +19,28 @@ function renderAppBridge({ api, config }, request, redirectTo) {
+     // must not end up in security-sensitive headers.
+     const shop = api.utils.sanitizeShop(new URL(request.url).searchParams.get('shop'));
+     addDocumentResponseHeaders(responseHeaders, isEmbeddedApp, shop);
++
++    // FIX: App Bridge reads `shopify.config.host` and decodes it with atob().
++    // The host param from the URL is base64-encoded. Without setting
++    // `globalThis.shopify.config.host` before the App Bridge script loads,
++    // atob(undefined) returns "" and the App Bridge uses `location.origin`
++    // (https://duvi-tools.fly.dev) as the targetOrigin, which fails to
++    // postMessage to the parent window at admin.shopify.com.
++    const requestUrl = new URL(request.url);
++    const hostParam = requestUrl.searchParams.get('host');
++    const localeParam = requestUrl.searchParams.get('locale') || '';
++    let decodedHost = '';
++    try {
++        decodedHost = hostParam ? Buffer.from(hostParam, 'base64').toString('utf8') : '';
++    } catch (e) {
++        decodedHost = '';
++    }
++    const shopConfigScript = decodedHost
++        ? `<script>(function(){var s=globalThis.shopify=globalThis.shopify||{};s.config=s.config||{};s.config.host=${JSON.stringify(decodedHost)};s.config.apiKey=${JSON.stringify(config.apiKey)};s.config.shop=${JSON.stringify(shop)};s.config.locale=${JSON.stringify(localeParam)};s.config.embedded=true;}());</script>`
++        : '';
++
+     throw new Response(`
++      ${shopConfigScript}
+       <script data-api-key="${config.apiKey}" src="${appBridgeUrl()}"></script>
+       ${redirectToScript}
+     `, { headers: responseHeaders });
