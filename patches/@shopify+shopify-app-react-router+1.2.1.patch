@@ -1,8 +1,18 @@
 diff --git a/node_modules/@shopify/shopify-app-react-router/dist/esm/server/authenticate/admin/helpers/render-app-bridge.mjs b/node_modules/@shopify/shopify-app-react-router/dist/esm/server/authenticate/admin/helpers/render-app-bridge.mjs
-index b923696..92e4e1f 100644
+index b923696..91b531d 100644
 --- a/node_modules/@shopify/shopify-app-react-router/dist/esm/server/authenticate/admin/helpers/render-app-bridge.mjs
 +++ b/node_modules/@shopify/shopify-app-react-router/dist/esm/server/authenticate/admin/helpers/render-app-bridge.mjs
-@@ -19,7 +19,28 @@ function renderAppBridge({ api, config }, request, redirectTo) {
+@@ -12,6 +12,9 @@ function renderAppBridge({ api, config }, request, redirectTo) {
+     }
+     const responseHeaders = new Headers({
+         'content-type': 'text/html;charset=utf-8',
++        'cache-control': 'no-store, no-cache, must-revalidate, private',
++        'pragma': 'no-cache',
++        'expires': '0',
+     });
+     const isEmbeddedApp = config.distribution !== AppDistribution.ShopifyAdmin;
+     // Sanitize the shop param before using it in response headers (e.g. CSP
+@@ -19,7 +22,28 @@ function renderAppBridge({ api, config }, request, redirectTo) {
      // must not end up in security-sensitive headers.
      const shop = api.utils.sanitizeShop(new URL(request.url).searchParams.get('shop'));
      addDocumentResponseHeaders(responseHeaders, isEmbeddedApp, shop);
